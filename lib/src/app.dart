@@ -16,9 +16,16 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          primarySwatch: Colors.blue,
+          iconTheme: IconThemeData(color: Colors.white),
+          accentColor: Colors.orange[800],
+          cardColor: Colors.orange[800],
           visualDensity: VisualDensity.adaptivePlatformDensity,
-          textTheme: GoogleFonts.adaminaTextTheme(),
+          textTheme: GoogleFonts.adaminaTextTheme(
+            TextTheme(
+              headline1: TextStyle(color: Colors.white),
+              headline5: TextStyle(color: Colors.white),
+            ),
+          ),
         ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),

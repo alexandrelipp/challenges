@@ -1,46 +1,63 @@
+import 'dart:math';
+
 import 'package:flutter/material.dart';
 import '../models/challenge.dart';
 import 'package:percent_indicator/percent_indicator.dart';
 
 class ChallengeTile extends StatelessWidget {
+  double progress;
   final Challenge challenge;
+  bool done;
+  ChallengeTile(this.challenge)
+      : done = DateTime.now().isAfter(challenge.dueDate);
 
-  const ChallengeTile(this.challenge);
   @override
   Widget build(BuildContext context) {
-    //TODO show progression bar
+    if (!done) {
+      final challengeDurationHours =
+          max((challenge.startDate.difference(challenge.dueDate)).inHours, 1);
+      final completedHours =
+          (DateTime.now().difference(challenge.startDate)).inHours;
+      progress = min((completedHours / challengeDurationHours).abs(),1);
+      print(challengeDurationHours);
+      print(completedHours);
+      print(progress);
+    }
     return Card(
-      color: Colors.blue[900],
-      elevation: 5,
-      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(10)),
-      child: Container(
-        padding: EdgeInsets.all(8),
-        margin: EdgeInsets.all(4),
-        decoration: BoxDecoration(
-          borderRadius: BorderRadius.circular(10),
-          color: Colors.blue[600],
-        ),
+      margin: EdgeInsets.symmetric(horizontal: 8, vertical: 4),
+      color: Colors.blueGrey[600],
+      elevation: 10,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(4)),
+      child: Padding(
+        padding: const EdgeInsets.all(20),
         child: Row(
           mainAxisAlignment: MainAxisAlignment.spaceBetween,
           children: [
-            Column(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Text(
-                  challenge.title ?? 'a title',
-                  style: TextStyle(color: Colors.white),
-                ),
-                Text(challenge.date ?? 'a date')
-              ],
+            Expanded(
+              child: Text(
+                challenge.title.toString() ?? 'a title',
+                style: TextStyle(color: Colors.white, fontSize: 18),
+              ),
+              // Text(challenge.date ?? 'a date')
             ),
-            CircularPercentIndicator(
-              center: Text('80%'),
-              animation: true,
-              progressColor: Colors.lightGreen[900],
-              percent: 0.8,
-              radius: 40,
-              lineWidth: 8,
-            ),
+            !done
+                ? CircularPercentIndicator(
+                    backgroundWidth: 3,
+                    progressColor: Theme.of(context)
+                        .accentColor
+                        .withOpacity(min(progress + 0.3, 1)),
+                    circularStrokeCap: CircularStrokeCap.round,
+                    animation: true,
+                    backgroundColor: Colors.blueGrey[800],
+                    percent: progress,
+                    radius: 40,
+                    lineWidth: 8,
+                  )
+                : Icon(
+                    Icons.check,
+                    size: 40,
+                    color: Theme.of(context).accentColor,
+                  ),
           ],
         ),
       ),

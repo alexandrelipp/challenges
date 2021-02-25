@@ -1,33 +1,24 @@
+import 'dart:io';
+
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 
 class Challenge {
-  final String date;
-  final String dueDate;
+  final DateTime startDate;
+  final DateTime dueDate;
   final String title;
-  final String description;
 
   Challenge({
-    @required this.date,
+    @required this.startDate,
     @required this.title,
     this.dueDate,
-    this.description,
   });
 
   factory Challenge.fromJson(Map<String, dynamic> json) {
     return Challenge(
-      date: json['date'] as String,
-      dueDate: json['dueDate'] as String,
+      startDate: (json['startDate'] as Timestamp).toDate(),
+      dueDate: (json['dueDate'] as Timestamp).toDate(),
       title: json['title'] as String,
-      description: json['description'] as String,
     );
-  }
-
-  Map<String,String> toMap(){
-    return {
-      'date':date,
-      'dueDate':dueDate,
-      'description':description,
-      'title':title,
-    };
   }
 }

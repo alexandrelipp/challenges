@@ -10,21 +10,30 @@ class ChallengesProvider with ChangeNotifier {
   final firestoreService = FireStoreService();
   final authService = AuthService();
 
-  Stream<QuerySnapshot> get userChallenges => firestoreService.getUserChallenges(_uid);
+  Stream<QuerySnapshot> get userChallenges =>
+      firestoreService.getUserChallenges(_uid);
 
-  Future<String> signIn(String email,String password){
+  Future<String> signIn(String email, String password) {
     return authService.signInEmail(email, password);
   }
 
-  Future<String> signUp(String email,String password){
+  Future<String> signUp(String email, String password) {
     return authService.signUpEmail(email, password);
   }
 
-  Future<void> addChallenge(String title){
-    return firestoreService.addChallenge(_uid, title);
+  void triggerRebuild(){
+    notifyListeners();
   }
 
-  void signOut(){
+  void addChallenge(String title,DateTime date) {
+    firestoreService.addChallenge(_uid, {
+      'title':title,
+      'dueDate':date,
+      'startDate':DateTime.now(),
+    });
+  }
+
+  void signOut() {
     authService.signOut();
   }
 

@@ -8,14 +8,8 @@ class FireStoreService {
     return _db.collection('users/$uid/challenges').snapshots();
   }
 
-  Future<void> addChallenge(String uid, String title) async {
-    print('challenged added');
-    try {
-      await _db.collection('users/$uid/challenges').add({
-        'title': title,
-      });
-    } catch (e) {
-      throw (e);
-    }
+  void addChallenge(String uid, Map<String,Object> challenge) {
+    
+    _db.collection('users/$uid/challenges').add(challenge);
   }
 }
