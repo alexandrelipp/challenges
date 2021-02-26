@@ -1,10 +1,11 @@
 import 'package:flutter/material.dart';
-import '../models/challenge.dart';
 import 'package:provider/provider.dart';
-import '../providers/challenges_provider.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
-import '../widgets/challengeTile.dart';
+
+import '../models/challenge.dart';
+import '../providers/challenges_provider.dart';
 import '../widgets/addChallenge.dart';
+import '../widgets/challengeTile.dart';
 import '../widgets/customAppBar.dart';
 
 class MainScreen extends StatelessWidget {
@@ -15,7 +16,7 @@ class MainScreen extends StatelessWidget {
         backgroundColor: Colors.blueGrey[800],
         appBar: CustomAppBar(),
         floatingActionButton: FloatingActionButton(
-          child: Icon(Icons.add),
+          child: const Icon(Icons.add),
           onPressed: () {
             showModalBottomSheet(
                 context: context,
@@ -29,7 +30,10 @@ class MainScreen extends StatelessWidget {
           builder: (context, snapshot) {
             if (snapshot.hasError) {
               return Center(
-                child: Text('Something went wrong'),
+                child: Text(
+                  'Something went wrong',
+                  style: Theme.of(context).textTheme.headline5,
+                ),
               );
             }
             if (snapshot.connectionState == ConnectionState.waiting) {
@@ -41,7 +45,7 @@ class MainScreen extends StatelessWidget {
               return Center(
                 child: Text(
                   'You have no challenges.\n Try adding one!',
-                  style: TextStyle(color: Colors.orange[800],fontSize: 25),
+                  style: TextStyle(color: Colors.orange[800], fontSize: 25),
                   textAlign: TextAlign.center,
                 ),
               );
@@ -54,10 +58,11 @@ class MainScreen extends StatelessWidget {
               child: ListView(
                 children: [
                   ...snapshot.data.docs.map((DocumentSnapshot document) {
-                    final challenge = Challenge.fromJson(document.data());
+                    final challenge =
+                        Challenge.fromJson(document.data(), document.id);
                     return ChallengeTile(challenge);
                   }).toList(),
-                  SizedBox(height: 100)
+                  const SizedBox(height: 100)
                 ],
               ),
             );

@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:weekly_challenges/src/providers/challenges_provider.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -9,8 +8,9 @@ class AuthScreen extends StatefulWidget {
   _AuthScreenState createState() => _AuthScreenState();
 }
 
-class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateMixin {
-  final _primaryColor = Colors.blue[500];
+class _AuthScreenState extends State<AuthScreen>
+    with SingleTickerProviderStateMixin {
+  final _primaryColor = Colors.orange[800];
   final _secondaryColor = Colors.white;
   final _formKey = GlobalKey<FormState>();
   var _obscureText = true;
@@ -46,8 +46,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
               child: LayoutBuilder(
                 builder: (context, constraints) => Container(
                   decoration: BoxDecoration(
-                    color: Colors.white,
-                    border: Border.all(color: Colors.blue[900], width: 2),
+                    color: Colors.blueGrey[700],
+                    border: Border.all(color: Colors.orange, width: 2),
                     borderRadius: BorderRadius.circular(10),
                   ),
                   padding: const EdgeInsets.all(8),
@@ -60,7 +60,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                         const SizedBox(height: 10),
                         TextFormField(
                           validator: (String email) {
-                            if (!RegExp(r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
+                            if (!RegExp(
+                                    r"^[a-zA-Z0-9.a-zA-Z0-9.!#$%&'*+-/=?^_`{|}~]+@[a-zA-Z0-9]+\.[a-zA-Z]+")
                                 .hasMatch(email)) {
                               return 'Please provide a valid email adress';
                             }
@@ -71,8 +72,11 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                           autocorrect: false,
                           keyboardType: TextInputType.emailAddress,
                           decoration: InputDecoration(
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            focusColor: Colors.amberAccent,
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 20),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8)),
                             icon: const Icon(Icons.email),
                             labelText: 'Email',
                             filled: true,
@@ -93,15 +97,19 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                           obscureText: _obscureText,
                           decoration: InputDecoration(
                             suffixIcon: GestureDetector(
-                              child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                              child: Icon(_obscureText
+                                  ? Icons.visibility
+                                  : Icons.visibility_off),
                               onTap: () {
                                 setState(() {
                                   _obscureText = !_obscureText;
                                 });
                               },
                             ),
-                            contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                            border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                            contentPadding:
+                                const EdgeInsets.symmetric(horizontal: 20),
+                            border: OutlineInputBorder(
+                                borderRadius: BorderRadius.circular(8)),
                             icon: const Icon(Icons.lock),
                             labelText: 'Password',
                             filled: true,
@@ -123,7 +131,9 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                 ? null
                                 : TextFormField(
                                     validator: (newValue) {
-                                      if (!_isLogin && newValue != _password) return "The passwords don't match!";
+                                      if (!_isLogin && newValue != _password) {
+                                        return "The passwords don't match!";
+                                      }
                                       return null;
                                     },
                                     enableSuggestions: false,
@@ -136,10 +146,16 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                             _obscureText = !_obscureText;
                                           });
                                         },
-                                        child: Icon(_obscureText ? Icons.visibility : Icons.visibility_off),
+                                        child: Icon(_obscureText
+                                            ? Icons.visibility
+                                            : Icons.visibility_off),
                                       ),
-                                      contentPadding: const EdgeInsets.symmetric(horizontal: 20),
-                                      border: OutlineInputBorder(borderRadius: BorderRadius.circular(8)),
+                                      contentPadding:
+                                          const EdgeInsets.symmetric(
+                                              horizontal: 20),
+                                      border: OutlineInputBorder(
+                                          borderRadius:
+                                              BorderRadius.circular(8)),
                                       icon: const Icon(Icons.lock),
                                       labelText: 'Confirm Password',
                                       filled: true,
@@ -157,7 +173,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                             ),
                             clipBehavior: Clip.hardEdge,
                             padding: const EdgeInsets.symmetric(horizontal: 40),
-                            color: Colors.blue,
+                            color: _primaryColor,
                             onPressed: () async {
                               if (_formKey.currentState.validate()) {
                                 _formKey.currentState.save();
@@ -166,16 +182,22 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                                   _isWaiting = true;
                                 });
                                 if (_isLogin) {
-                                  final _message = await context.read<ChallengesProvider>().signIn(_email, _password);
+                                  final _message = await context
+                                      .read<ChallengesProvider>()
+                                      .signIn(_email, _password);
                                   if (_message != 'success') {
                                     Scaffold.of(context).hideCurrentSnackBar();
-                                    Scaffold.of(ctx).showSnackBar(_errorSnackBar(_message));
+                                    Scaffold.of(ctx)
+                                        .showSnackBar(_errorSnackBar(_message));
                                   }
                                 } else {
-                                  final _message = await context.read<ChallengesProvider>().signUp(_email, _password);
+                                  final _message = await context
+                                      .read<ChallengesProvider>()
+                                      .signUp(_email, _password);
                                   if (_message != 'success') {
                                     Scaffold.of(context).hideCurrentSnackBar();
-                                    Scaffold.of(ctx).showSnackBar(_errorSnackBar(_message));
+                                    Scaffold.of(ctx)
+                                        .showSnackBar(_errorSnackBar(_message));
                                   }
                                 }
                                 setState(() {
@@ -186,7 +208,8 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                             child: !_isWaiting
                                 ? Text(!_isLogin ? 'Sign Up' : 'Login')
                                 : const CircularProgressIndicator(
-                                    valueColor: AlwaysStoppedAnimation<Color>(Colors.white),
+                                    valueColor: AlwaysStoppedAnimation<Color>(
+                                        Colors.white),
                                   ),
                           ),
                         ),
@@ -198,7 +221,7 @@ class _AuthScreenState extends State<AuthScreen> with SingleTickerProviderStateM
                           },
                           child: Text(
                             _isLogin ? 'Sign Up' : 'Login',
-                            style: TextStyle(color: Colors.grey[600]),
+                            style: TextStyle(color: Colors.grey[300]),
                           ),
                         )
                       ],

@@ -4,8 +4,8 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:provider/provider.dart';
 
 import '../src/providers/challenges_provider.dart';
-import '../src/screens/mainScreen.dart';
 import '../src/screens/authScreen.dart';
+import '../src/screens/mainScreen.dart';
 
 class MyApp extends StatelessWidget {
   // This widget is the root of your application.
@@ -16,16 +16,21 @@ class MyApp extends StatelessWidget {
       child: MaterialApp(
         title: 'Flutter Demo',
         theme: ThemeData(
-          iconTheme: IconThemeData(color: Colors.white),
+          primarySwatch: Colors.orange,
+          focusColor: Colors.orange,
+          iconTheme: const IconThemeData(color: Colors.white),
           accentColor: Colors.orange[800],
           cardColor: Colors.orange[800],
           visualDensity: VisualDensity.adaptivePlatformDensity,
           textTheme: GoogleFonts.adaminaTextTheme(
-            TextTheme(
+            const TextTheme(
               headline1: TextStyle(color: Colors.white),
               headline5: TextStyle(color: Colors.white),
+              subtitle1: TextStyle(color: Colors.white),
             ),
           ),
+          inputDecorationTheme:
+              const InputDecorationTheme(focusColor: Colors.white),
         ),
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
